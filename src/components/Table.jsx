@@ -1,86 +1,69 @@
-import { useMemo } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
+  createMRTColumnHelper,
 } from "material-react-table";
-
-//nested data is ok, see accessorKeys in ColumnDef below
-const data = [
-  {
-    name: {
-      firstName: "John",
-      lastName: "Doe",
-    },
-    address: "261 Erdman Ford",
-    city: "East Daphne",
-    state: "Kentucky",
-  },
-  {
-    name: {
-      firstName: "Jane",
-      lastName: "Doe",
-    },
-    address: "769 Dominic Grove",
-    city: "Columbus",
-    state: "Ohio",
-  },
-  {
-    name: {
-      firstName: "Joe",
-      lastName: "Doe",
-    },
-    address: "566 Brakus Inlet",
-    city: "South Linda",
-    state: "West Virginia",
-  },
-  {
-    name: {
-      firstName: "Kevin",
-      lastName: "Vandy",
-    },
-    address: "722 Emie Stream",
-    city: "Lincoln",
-    state: "Nebraska",
-  },
-  {
-    name: {
-      firstName: "Joshua",
-      lastName: "Rolluffs",
-    },
-    address: "32188 Larkin Turnpike",
-    city: "Charleston",
-    state: "South Carolina",
-  },
-];
+import { Box, IconButton } from "@mui/material";
+import SwapVertIcon from "@mui/icons-material/SwapVert";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import { useMemo, useState } from "react";
+import { DATA } from "../utils/Data"
+import moment from "moment";
 
 const Example = () => {
-  //should be memoized or stable
+  const data = DATA;
+  const columnHelper = createMRTColumnHelper();
+
   const columns = useMemo(
     () => [
       {
-        accessorKey: "name.firstName", //access nested data with dot notation
-        header: "First Name",
+        accessorKey: "id",
+        header: "ID",
+        size: 100,
+      },
+      {
+        accessorKey: "name",
+        header: "Name",
         size: 150,
       },
       {
-        accessorKey: "name.lastName",
-        header: "Last Name",
-        size: 150,
+        accessorKey: "category",
+        header: "Category",
+        size: 100,
       },
       {
-        accessorKey: "address", //normal accessorKey
-        header: "Address",
-        size: 200,
+        accessorKey: "subcategory",
+        header: "Sub Category",
+        size: 100,
+      },
+      columnHelper.accessor("createdAt", {
+        header: "Created At",
+        Cell: ({ cell }) => {
+          // Manipulate the data before rendering
+          const date = cell.getValue();
+          const formattedDate = moment(date).format("DD-MMM-YYYY");
+          return <div>{formattedDate}</div>;
+        },
+      }),
+      columnHelper.accessor("updatedAt", {
+        header: "Updated At",
+        Cell: ({ cell }) => {
+          // Manipulate the date before rendering
+          const date = cell.getValue();
+          const formattedDate = moment(date).format("DD-MMM-YYYY");
+          return <div>{formattedDate}</div>;
+        },
+      }),
+      {
+        accessorKey: "price",
+        header: "Price",
+        size: 100,
       },
       {
-        accessorKey: "city",
-        header: "City",
-        size: 150,
-      },
-      {
-        accessorKey: "state",
-        header: "State",
-        size: 150,
+        accessorKey: "sale_price",
+        header: "Sale Price",
+        size: 100,
       },
     ],
     []
@@ -89,32 +72,56 @@ const Example = () => {
   const table = useMaterialReactTable({
     columns,
     data,
-    enableColumnFilterModes: true,
-    enableColumnOrdering: true,
-    enableGrouping: false,
-    enableColumnPinning: false,
-    enableFacetedValues: true,
-    enableRowActions: false,
-    enableRowSelection: false,
-    initialState: {
-      showColumnFilters: false,
-      showGlobalFilter: true,
-    },
-    enablePagination: true,
-    muiPaginationProps: {
-      color: 'standard',
-      shape: "rounded",
-      showRowsPerPage: false,
-      variant: "outlined",
-    },
-    paginationDisplayMode: "pages",
-    muiSearchTextFieldProps: {
-      size: "small",
-      variant: "outlined",
-    },
+    enableColumnActions: false,
+    renderToolbarInternalActions: ({ table }) => (
+      <Box>
+        <IconButton
+          onClick={() => {
+            setShowFilterSideBar(true);
+          }}
+        >
+          <FilterListIcon />
+        </IconButton>
+        <IconButton
+          onClick={() => {
+            setShowSortSideBar(true);
+          }}
+        >
+          <SwapVertIcon />
+        </IconButton>
+        <IconButton
+          onClick={() => {
+            setShowColumnSideBar(true);
+          }}
+        >
+          <VisibilityIcon />
+        </IconButton>
+      </Box>
+    ),
   });
 
-  return <MaterialReactTable table={table} />;
+  return (
+    <div style={{ height: 400, width: "100%" }}>
+      <MaterialReactTable table={table} />
+      {/* <SideBarColumnSelector
+        open={showColumnSideBar}
+        table={table}
+        setShowColumnSideBar={() => setShowColumnSideBar(false)}
+      />
+      <SideBarSorting
+        open={showSortSideBar}
+        table={table}
+        columns={columns}
+        setShowSortSideBar={() => setShowSortSideBar(false)}
+      />
+      <SideBarFilter
+        open={showFilterSideBar}
+        table={table}
+        columns={columns}
+        setShowFilterSideBar={() => setShowFilterSideBar(false)}
+      /> */}
+    </div>
+  );
 };
 
 export default Example;
