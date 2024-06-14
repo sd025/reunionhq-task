@@ -8,59 +8,50 @@ import { useMemo } from 'react';
 
 const TableHook = () => {
   const columnHelper = createMRTColumnHelper();
-
   const columns = useMemo(
     () => [
-      {
-        accessorKey: 'id', 
+      columnHelper.accessor('id', {
         header: 'ID',
         size: 50,
-      },
-      {
-        accessorKey: 'name', 
+      }),
+      columnHelper.accessor('name', {
         header: 'Name',
         size: 150,
-      },
-      {
-        accessorKey: 'category', 
+      }),
+      columnHelper.accessor('category', {
         header: 'Category',
         size: 100,
-      },
-      {
-        accessorKey: 'subcategory', 
+      }),
+      columnHelper.accessor('subcategory', {
         header: 'Subcategory',
         size: 100,
-      },
-      columnHelper.accessor("createdAt", {
-        header: "Created At",
+      }),
+      columnHelper.accessor('createdAt', {
+        header: 'Created At',
         Cell: ({ cell }) => {
-          // Manipulate the data before rendering
           const date = cell.getValue();
-          const formattedDate = moment(date).format("DD-MMM-YYYY");
+          const formattedDate = moment(date).format('DD-MMM-YYYY');
           return <div>{formattedDate}</div>;
         },
       }),
-      columnHelper.accessor("updatedAt", {
-        header: "Updated At",
+      columnHelper.accessor('updatedAt', {
+        header: 'Updated At',
         Cell: ({ cell }) => {
-          // Manipulate the date before rendering
           const date = cell.getValue();
-          const formattedDate = moment(date).format("DD-MMM-YYYY");
+          const formattedDate = moment(date).format('DD-MMM-YYYY');
           return <div>{formattedDate}</div>;
         },
       }),
-      {
-        accessorKey: 'price',
+      columnHelper.accessor('price', {
         header: 'Price',
         size: 100,
-      },
-      {
-        accessorKey: 'sale_price',
+      }),
+      columnHelper.accessor('sale_price', {
         header: 'Sale Price',
         size: 100,
-      },
+      }),
     ],
-    [],
+    []
   );
 
   const {
@@ -75,7 +66,7 @@ const TableHook = () => {
     console.error('Error fetching data:', error);
   }
 
-  return { columns,items, error, isLoading }
+  return { columns, items, error, isLoading }
 }
 
 export default TableHook;

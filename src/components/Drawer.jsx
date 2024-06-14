@@ -7,12 +7,10 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ColumnHideShow from './Hide';
 import SortColumn from './Sort';
 import CreateGroups from './Groups';
-
-
+import FilterColumn from './Filter';
 
 const AnchorTemporaryDrawer = ({ isOpen, onClose,  drawerContent, btnType, setColHeaderGroup }) => {
   const [open, setOpen] = useState(isOpen);
-
 
   useEffect(() => {
     setOpen(isOpen);
@@ -56,7 +54,7 @@ const AnchorTemporaryDrawer = ({ isOpen, onClose,  drawerContent, btnType, setCo
       >
       {btnType === 'showHideColsBtn' && <ColumnHideShow table={drawerContent}/>}
       {btnType === 'sortColsBtn' && <SortColumn  table={drawerContent}/>}
-      {btnType === 'filterColsBtn' && <SortColumn  table={drawerContent} />}
+      {btnType === 'filterColsBtn' && <FilterColumn  table={drawerContent} />}
       {btnType === 'createGroupsBtn' && <CreateGroups  table={drawerContent} setColHeaderGroup={setColHeaderGroup} />}
       
       

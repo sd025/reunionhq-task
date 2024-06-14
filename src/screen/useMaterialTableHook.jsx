@@ -26,10 +26,11 @@ export default function useMaterialTableHook() {
       showColumnFilters: false,
       showGlobalFilter: true,
       enableGlobalFilterModes: true,
-      grouping:colHeaderGroup,
+      grouping: colHeaderGroup,
       expanded: true,
     },
     enablePagination: true,
+    enableBottomToolbar: true,
     muiPaginationProps: {
       color: "standard",
       shape: "rounded",

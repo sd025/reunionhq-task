@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
-import { DateRangePicker } from 'rsuite';
-import 'rsuite/DateRangePicker/styles/index.css';
+import React, { useState } from "react";
+import { DateRangePicker } from "rsuite";
+import "rsuite/DateRangePicker/styles/index.css";
 
-const DatePicker = ({ onChange }) => {
-  const [dateRange, setDateRange] = useState([null, null]);
-
-  const handleDateChange = (value) => {
-    setDateRange(value);
-    onChange(value);
-  };
-
+const DatePicker = ({ value, onChange }) => {
   return (
     <DateRangePicker
-      value={dateRange}
-      onChange={handleDateChange}
-      showOneCalendar
+      startText="Start"
+      endText="End"
+      value={value}
+      onChange={(newValue) => onChange(newValue)}
+      renderInput={(startProps, endProps) => (
+        <>
+          <TextField {...startProps} />
+          <Box sx={{ mx: 2 }}> to </Box>
+          <TextField {...endProps} />
+        </>
+      )}
     />
   );
 };

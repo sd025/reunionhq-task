@@ -1,156 +1,181 @@
 import {
-    Box,
-    Drawer,
-    Button,
-    IconButton,
-    TextField,
-    MenuItem,
-    Slider,
-  } from "@mui/material";
-  import RestartAltIcon from "@mui/icons-material/RestartAlt";
-  import CancelIcon from "@mui/icons-material/Cancel";
-  import MultiSelect from "./Select";
-  import { useState } from "react";
-  import DatePicker from "./DatePicker";
-  
-  const Filter = ({ open, table, setShowFilterSideBar }) => {
-    const [textInput, setTextInput] = useState("");
-    const [subcatInput, setSubCatInput] = useState("");
-    const [created, setCreated] = useState([null, null]);
-    const [updated, setUpdated] = useState([null, null]);
-    const [priceRange, setPriceRange] = useState([0, 1000]);
-    const [salepriceRange, setSalePriceRange] = useState([0, 1000]);
-  
-    const applyFilters = () => {
-      const filters = {
-        textInput,
-        subcatInput,
-        created,
-        updated,
-        priceRange,
-        salepriceRange,
-      };
-  
-      table.setGlobalFilter(filters);
-      setShowFilterSideBar();
-    };
-  
-    return (
-      <Drawer anchor="right" open={open}>
-        <Box sx={{ width: "25vw" }} p={2}>
+  Box,
+  Button,
+  IconButton,
+  TextField,
+  MenuItem,
+  Slider,
+  Stack,
+} from "@mui/material";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import CancelIcon from "@mui/icons-material/Cancel";
+import MultiSelect from "./Select";
+import { useState } from "react";
+import DatePicker from "./DatePicker";
+
+const Filter = ({ table }) => {
+  const [filters, setFilters] = useState({
+    name: "",
+    category: [],
+    subcategory: "",
+    createdAt: [null, null],
+    updatedAt: [null, null],
+    price: [0, 1000],
+    sale_price: [0, 1000],
+  });
+
+  const handleFilterChange = (key, value) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      name: "",
+      category: [],
+      subcategory: "",
+      createdAt: [null, null],
+      updatedAt: [null, null],
+      price: [0, 1000],
+      sale_price: [0, 1000],
+    });
+  };
+
+  const applyFilters = () => {
+    table.setAllFilters([
+      { id: 'name', value: filters.name },
+      { id: 'category', value: filters.category },
+      { id: 'subcategory', value: filters.subcategory },
+      { id: 'createdAt', value: filters.createdAt },
+      { id: 'updatedAt', value: filters.updatedAt },
+      { id: 'price', value: filters.price },
+      { id: 'sale_price', value: filters.sale_price },
+    ]);
+  };
+
+  return (
+    <Stack>
+      <Box sx={{ width: "25vw" }} p={2}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            alignContent: "center",
+          }}
+        >
+          <h2>Filtering Options</h2>
+          <IconButton>
+            <CancelIcon />
+          </IconButton>
+        </Box>
+        <Box
+          sx={{
+            width: "auto",
+            height: "auto",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* Name Filter */}
           <Box
             sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              alignContent: "center",
-            }}
-          >
-            <h2>Filtering Options</h2>
-            <IconButton onClick={setShowFilterSideBar}>
-              <CancelIcon />
-            </IconButton>
-          </Box>
-          <Box
-            sx={{
-              width: "auto",
-              height: "auto",
+              width: "100%",
               display: "flex",
               flexDirection: "column",
+              justifyContent: "center",
+              backgroundColor: "#e5e4e2",
+              my: 1,
+              p: 1,
+              borderRadius: "5px",
             }}
           >
             <Box
               sx={{
-                width: "100%",
                 display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                backgroundColor: "#e5e4e2",
-                my: 1,
-                p: 1,
-                borderRadius: "5px",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <h1>Name</h1>
-                <IconButton onClick={() => setTextInput("")}>
-                  <RestartAltIcon />
-                </IconButton>
-              </Box>
-              <TextField
-                size="small"
-                sx={{ backgroundColor: "white" }}
-                value={textInput}
-                id="name"
-                onChange={(e) => setTextInput(e.target.value)}
-              />
+              <h1>Name</h1>
+              <IconButton onClick={() => handleFilterChange("name", "")}>
+                <RestartAltIcon />
+              </IconButton>
             </Box>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                backgroundColor: "#e5e4e2",
-                my: 1,
-                p: 1,
-                borderRadius: "5px",
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <h1>Category</h1>
-                  <RestartAltIcon />
-              </Box>
-              <MultiSelect />
-            </Box>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                backgroundColor: "#e5e4e2",
-                my: 1,
-                p: 1,
-                borderRadius: "5px",
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <h1>Subcategory</h1>
-                <RestartAltIcon onClick={() => setSubCatInput("")} />
-              </Box>
-              <TextField
-                select
-                size="small"
-                sx={{ backgroundColor: "white" }}
-                id="name"
-                placeholder="hello"
-                value={subcatInput}
-                onChange={(e) => setSubCatInput(e.target.value)}
-              >
-                <MenuItem value="Cat One">Cat One</MenuItem>
-                <MenuItem value="Cat Two">Cat Two</MenuItem>
-              </TextField>
-            </Box>
+            <TextField
+              size="small"
+              sx={{ backgroundColor: "white" }}
+              id="name"
+              value={filters.name}
+              onChange={(e) => handleFilterChange("name", e.target.value)}
+            />
           </Box>
+          
+          {/* Category Filter */}
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              backgroundColor: "#e5e4e2",
+              my: 1,
+              p: 1,
+              borderRadius: "5px",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <h1>Category</h1>
+              <RestartAltIcon onClick={() => handleFilterChange("category", [])} />
+            </Box>
+            <MultiSelect
+              value={filters.category}
+              onChange={(value) => handleFilterChange("category", value)}
+            />
+          </Box>
+          
+          {/* Subcategory Filter */}
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              backgroundColor: "#e5e4e2",
+              my: 1,
+              p: 1,
+              borderRadius: "5px",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <h1>Subcategory</h1>
+              <RestartAltIcon onClick={() => handleFilterChange("subcategory", "")} />
+            </Box>
+            <TextField
+              select
+              size="small"
+              sx={{ backgroundColor: "white" }}
+              id="subcategory"
+              value={filters.subcategory}
+              onChange={(e) => handleFilterChange("subcategory", e.target.value)}
+            >
+              <MenuItem value="">None</MenuItem>
+              {/* Add your subcategory options here */}
+            </TextField>
+          </Box>
+          
+          {/* Created At Filter */}
           <Box
             sx={{ backgroundColor: "#e5e4e2", my: 1, p: 1, borderRadius: "5px" }}
           >
@@ -162,12 +187,17 @@ import {
               }}
             >
               <h1>Created At</h1>
-              <IconButton onClick={() => setCreated([null, null])}>
+              <IconButton onClick={() => handleFilterChange("createdAt", [null, null])}>
                 <RestartAltIcon />
               </IconButton>
             </Box>
-            <DatePicker onChange={(value) => setCreated(value)} />
+            <DatePicker
+              value={filters.createdAt}
+              onChange={(value) => handleFilterChange("createdAt", value)}
+            />
           </Box>
+          
+          {/* Updated At Filter */}
           <Box
             sx={{ backgroundColor: "#e5e4e2", my: 1, p: 1, borderRadius: "5px" }}
           >
@@ -179,13 +209,17 @@ import {
               }}
             >
               <h1>Updated At</h1>
-              <IconButton onClick={() => setUpdated([null, null])}>
+              <IconButton onClick={() => handleFilterChange("updatedAt", [null, null])}>
                 <RestartAltIcon />
               </IconButton>
             </Box>
-            <DatePicker onChange={(value) => setUpdated(value)} />
+            <DatePicker
+              value={filters.updatedAt}
+              onChange={(value) => handleFilterChange("updatedAt", value)}
+            />
           </Box>
-  
+          
+          {/* Price Filter */}
           <Box
             sx={{ backgroundColor: "#e5e4e2", my: 1, p: 1, borderRadius: "5px" }}
           >
@@ -197,21 +231,24 @@ import {
               }}
             >
               <h1>Price</h1>
-              <IconButton onClick={() => setPriceRange([0, 1000])}>
+              <IconButton onClick={() => handleFilterChange("price", [0, 1000])}>
                 <RestartAltIcon />
               </IconButton>
             </Box>
             <Slider
-              value={priceRange}
-              onChange={(e, newValue) => setPriceRange(newValue)}
               valueLabelDisplay="auto"
               min={0}
               max={1000}
               step={10}
+              value={filters.price}
+              onChange={(e, value) => handleFilterChange("price", value)}
             />
-            <span>${priceRange[0]} - ${priceRange[1]}</span>
+            <span>
+              ${filters.price[0]} - ${filters.price[1]}
+            </span>
           </Box>
-  
+          
+          {/* Sale Price Filter */}
           <Box
             sx={{ backgroundColor: "#e5e4e2", my: 1, p: 1, borderRadius: "5px" }}
           >
@@ -223,21 +260,25 @@ import {
               }}
             >
               <h1>Sale Price</h1>
-              <IconButton onClick={() => setSalePriceRange([0, 1000])}>
+              <IconButton onClick={() => handleFilterChange("sale_price", [0, 1000])}>
                 <RestartAltIcon />
               </IconButton>
             </Box>
             <Slider
-              value={salepriceRange}
-              onChange={(e, newValue) => setSalePriceRange(newValue)}
               valueLabelDisplay="auto"
               min={0}
               max={1000}
               step={10}
+              value={filters.sale_price}
+              onChange={(e, value) => handleFilterChange("sale_price", value)}
             />
-            <span>${salepriceRange[0]} - ${salepriceRange[1]}</span>
+            <span>
+              ${filters.sale_price[0]} - ${filters.sale_price[1]}
+            </span>
           </Box>
         </Box>
+        
+        {/* Buttons to Clear and Apply Filters */}
         <Box
           sx={{
             display: "flex",
@@ -255,14 +296,7 @@ import {
               marginBottom: 1,
               marginTop: 4,
             }}
-            onClick={() => {
-              setTextInput("");
-              setSubCatInput("");
-              setCreated([null, null]);
-              setUpdated([null, null]);
-              setPriceRange([0, 1000]);
-              setSalePriceRange([0, 1000]);
-            }}
+            onClick={clearFilters}
           >
             Clear Filters
           </Button>
@@ -280,9 +314,58 @@ import {
             Apply Filters
           </Button>
         </Box>
-      </Drawer>
-    );
-  };
-  
-  export default Filter;
-  
+      </Box>
+    </Stack>
+  );
+};
+
+export default Filter;
+// import React, { useState } from 'react';
+// import { Button, List, ListItem, Stack, TextField } from '@mui/material';
+// import RestartAltIcon from '@mui/icons-material/RestartAlt';
+
+// const FilterColumn = ({ table }) => {
+//   const [filters, setFilters] = useState({});
+
+//   const handleFilterChange = (columnId, value) => {
+//     setFilters((prev) => ({ ...prev, [columnId]: value }));
+//     table.setColumnFilters([{ id: columnId, value }]);
+//   };
+
+//   const clearFilters = () => {
+//     setFilters({});
+//     table.resetColumnFilters();
+//   };
+
+//   return (
+//     <>
+//       {table.getAllLeafColumns().map((column) => (
+//         <Stack key={column.id} direction="row" alignItems="center">
+//           <List sx={{ border: '1px solid #d9d9d9', margin: '2px', flex: 1 }}>
+//             <ListItem sx={{ height: '30px' }}>
+//               {column.id}
+//               <TextField
+//                 size="small"
+//                 variant="outlined"
+//                 value={filters[column.id] || ''}
+//                 onChange={(e) => handleFilterChange(column.id, e.target.value)}
+//                 sx={{ marginLeft: '10px', flex: 1 }}
+//               />
+//             </ListItem>
+//           </List>
+//         </Stack>
+//       ))}
+//       <Stack paddingTop={1}>
+//         <Button
+//           sx={{ height: '45px' }}
+//           variant="outlined"
+//           onClick={clearFilters}
+//         >
+//           Clear Filters
+//         </Button>
+//       </Stack>
+//     </>
+//   );
+// };
+
+// export default FilterColumn;
