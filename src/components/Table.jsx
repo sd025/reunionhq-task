@@ -9,7 +9,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import FilterListIcon from "@mui/icons-material/FilterList";
 import LayersOutlinedIcon from '@mui/icons-material/LayersOutlined';
 import { useMemo, useState } from "react";
-import { DATA } from "../utils/Data";
+import { DATA } from "../../public/Data";
 import moment from "moment";
 import Selector from "./Hide";
 import Sorting from "./Sorting";
