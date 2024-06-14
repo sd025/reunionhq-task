@@ -1,9 +1,9 @@
-import Example from "./components/Table";
+import Table from "./components/Table";
 
 export default function App() {
   return (
     <div>
-      <Example/>
+      <Table />
     </div>
   )
 }

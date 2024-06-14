@@ -5,15 +5,21 @@ import {
 } from "material-react-table";
 import { Box, IconButton } from "@mui/material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import FilterListIcon from "@mui/icons-material/FilterList";
+import LayersOutlinedIcon from '@mui/icons-material/LayersOutlined';
 import { useMemo, useState } from "react";
-import { DATA } from "../utils/Data"
+import { DATA } from "../utils/Data";
 import moment from "moment";
+import Selector from "./Hide";
+import Sorting from "./Sorting";
 
-const Example = () => {
+const Table = () => {
   const data = DATA;
   const columnHelper = createMRTColumnHelper();
+
+  const [showSelector, setShowSelector] = useState(false);
+  const [showSort, setShowSort] = useState(false);
 
   const columns = useMemo(
     () => [
@@ -73,55 +79,75 @@ const Example = () => {
     columns,
     data,
     enableColumnActions: false,
-    renderToolbarInternalActions: ({ table }) => (
+    enableFacetedValues: true,
+    initialState: {
+      showColumnFilters: false,
+      showGlobalFilter: true,
+    },
+    enablePagination: true,
+    muiPaginationProps: {
+      color: "standard",
+      shape: "rounded",
+      showRowsPerPage: false,
+      variant: "outlined",
+    },
+    paginationDisplayMode: "pages",
+    muiSearchTextFieldProps: {
+      size: "small",
+      variant: "outlined",
+    },
+    renderToolbarInternalActions: ( table ) => (
       <Box>
         <IconButton
           onClick={() => {
-            setShowFilterSideBar(true);
+            setShowSelector(true);
           }}
         >
-          <FilterListIcon />
+          <VisibilityOutlinedIcon />
         </IconButton>
         <IconButton
           onClick={() => {
-            setShowSortSideBar(true);
+            setShowSort(true);
           }}
         >
           <SwapVertIcon />
         </IconButton>
         <IconButton
           onClick={() => {
-            setShowColumnSideBar(true);
+            setShowFilter(true);
           }}
         >
-          <VisibilityIcon />
+          <FilterListIcon />
+        </IconButton>
+        <IconButton
+          onClick={() => {
+            setShowOrder(true);
+          }}
+        >
+          <LayersOutlinedIcon />
         </IconButton>
       </Box>
     ),
   });
 
+  console.log('Table Columns:', columns); // Log columns to verify data
+
+
   return (
     <div style={{ height: 400, width: "100%" }}>
       <MaterialReactTable table={table} />
-      {/* <SideBarColumnSelector
-        open={showColumnSideBar}
+      <Sorting
+        open={showSort}
         table={table}
-        setShowColumnSideBar={() => setShowColumnSideBar(false)}
+        setShowSort={() => setShowSort(false)}
       />
-      <SideBarSorting
-        open={showSortSideBar}
+      <Selector
+        open={showSelector}
         table={table}
-        columns={columns}
-        setShowSortSideBar={() => setShowSortSideBar(false)}
+        setShowSelector={() => setShowSelector(false)}
       />
-      <SideBarFilter
-        open={showFilterSideBar}
-        table={table}
-        columns={columns}
-        setShowFilterSideBar={() => setShowFilterSideBar(false)}
-      /> */}
     </div>
   );
 };
 
-export default Example;
+export default Table;
